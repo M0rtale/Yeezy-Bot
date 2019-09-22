@@ -1,0 +1,112 @@
+/* Author: Allen Qiu
+ * 
+ * Automatically allocates 100 bots to wait on the yeezy website
+ */
+
+//test
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.chrome.ChromeOptions;
+//import org.openqa.selenium.DesiredCapabilities;
+
+import org.openqa.selenium.chrome.ChromeDriver;
+//
+//import java.net.URL;
+//import java.net.HttpURLConnection;
+//import java.net.MalformedURLException;
+//import java.io.IOException;
+//import java.io.InputStreamReader;
+//import java.io.InputStream;
+//import java.io.BufferedReader;
+
+import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Calendar;
+import java.util.Date;
+import java.io.File;
+
+//import javax.swing.*;
+
+public class Go
+{
+  final static String site = "https://yeezysupply.com/";
+  final static String hma = "C:/Users/Allen/appData/Local/Google/Chrome/User Data/Default/Extensions/poeojclicodamonabcabmapamjkkmnnk/1.0.701_0.crx";
+  final static String size = "12";
+  
+  static WebDriver[] bots;
+  
+  public static void keepAlive()
+  {
+    while(true)
+    {
+      for(int i = 0; i < 50; i++)
+      {
+        bots[i].navigate().refresh();
+        String title = bots[i].getTitle();
+        if(title.indexOf("Please Stand By") == -1)
+        {
+          if(title.indexOf("Access Denied") != -1 || title.indexOf("Access to this page has been denie") != -1)
+          {
+            //if detected bot and denied
+            bots[i] = new ChromeDriver();
+            bots[i].get("https://www.champssports.com/product/adidas-originals-yeezy-boost-350-mens/CH3043FW.html");
+            continue;
+          }
+          
+          //Store the current window handle
+          String currentWindowHandle = bots[i].getWindowHandle();
+          
+//run your javascript and alert code
+          ((JavascriptExecutor)bots[i]).executeScript("alert('Ready!')"); 
+          bots[i].switchTo().alert().accept();
+          
+//Switch back to to the window using the handle saved earlier
+          bots[i].switchTo().window(currentWindowHandle);
+        }
+      }
+    }
+  }
+  
+  
+  //Cart XPath: //*[@id="js-wrap"]/header/div[2]/a/span[1]
+  //Checkout XPath: //*[@id="js-main"]/div/form/div/div[3]/ul/li[3]/input
+  public static void main(String[] args)
+  {
+    bots = new WebDriver[1];
+    for(int i = 0; i < 1; i++)
+    {
+      bots[i] = new ChromeDriver();
+      bots[i].get("https://yeezysupply.com/");
+      
+      //choose size
+      Select options = new Select(bots[i].findElements(By.tagName("select")));
+      options.selectByVisibleText(size);
+      
+      List<WebElement> purchaseCart = bots[i].findElements(By.tagName("input"));
+      for(WebElement elem : purchaseCart) // Click first purchase
+      {
+        try
+        {
+        elem.click();
+        }
+        catch(Exception e){ continue; }
+        break;
+      }
+      
+      //click cart
+      WebDriverWait wait = WebDriverWait(bots[i], 1);
+      wait.until(ExpectedConditions.elementToBeClickable(By.
+    }
+    //keepAlive();
+  }
+}
+    
+    
+    
+    
+  
+  
